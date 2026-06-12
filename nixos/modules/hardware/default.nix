@@ -1,4 +1,4 @@
-{ lib, config, ... }: {
+{ lib, pkgs, config, ... }: {
   imports = [
     ./bluetooth
     ./kernel
@@ -24,7 +24,7 @@
 
     zramSwap.enable = true;
     hardware = {
-      cpu.intel.updateMicrocode = true; # To not change upstream! It is managed by the installer
+      cpu.intel.updateMicrocode = lib.mkIf pkgs.hostPlatform.isx86_64 true; # To not change upstream! It is managed by the installer
       bluetooth.enable = true;
       #enableAllFirmware = true; # Need allowUnfree = true
       enableRedistributableFirmware = true;

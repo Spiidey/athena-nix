@@ -28,8 +28,8 @@ with lib;
   # USB booting
   isoImage.makeUsbBootable = true;
 
-  # Add Memtest86+ to the CD.
-  boot.loader.grub.memtest86.enable = true;
+  # Add Memtest86+ to the CD (x86 only — not available on aarch64).
+  boot.loader.grub.memtest86.enable = mkDefault pkgs.stdenv.hostPlatform.isx86;
 
   # An installation media cannot tolerate a host config defined file
   # system layout on a fresh machine, before it has been formatted.

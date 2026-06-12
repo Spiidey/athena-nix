@@ -7,15 +7,15 @@
   boot = {
     kernelPackages = pkgs.linuxPackages; # LTS Kernel
     kernelModules = [ "rtl8821cu" ];
-    loader.grub.useOSProber = true;
+    loader.grub.useOSProber = lib.mkIf pkgs.stdenv.hostPlatform.isx86 true;
   };
 
   # Needed for https://github.com/NixOS/nixpkgs/issues/58959
   boot.supportedFilesystems = lib.mkForce [ "btrfs" "reiserfs" "vfat" "ext4" "f2fs" "xfs" "ntfs" "cifs" ];
 
   hardware = {
-    cpu.amd.updateMicrocode = true;
-    cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = lib.mkIf pkgs.stdenv.hostPlatform.isx86 true;
+    cpu.intel.updateMicrocode = lib.mkIf pkgs.stdenv.hostPlatform.isx86 true;
     bluetooth.enable = true;
     #enableAllFirmware = true; # Need allowUnfree = true
     enableRedistributableFirmware = true;

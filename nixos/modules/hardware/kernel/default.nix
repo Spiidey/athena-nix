@@ -4,8 +4,8 @@
     boot = {
       kernelPackages = lib.mkDefault pkgs.linuxPackages; # LTS Kernel
       kernelModules = [ "rtl8821cu" ];
-      loader.grub.useOSProber = true;
-      extraModulePackages = with config.boot.kernelPackages; [ vmware ]; /*vmware needed to install VMware Workstation software*/
+      loader.grub.useOSProber = lib.mkIf pkgs.hostPlatform.isx86_64 true;
+      extraModulePackages = lib.optionals pkgs.hostPlatform.isx86_64 (with config.boot.kernelPackages; [ vmware ]); /*vmware needed to install VMware Workstation software*/
     };
   };
 }
