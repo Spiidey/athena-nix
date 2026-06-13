@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Built ISO images — these go in athena-nix-iso/out/ instead
+*.iso
+
+# Nix build results
+result
+result-*
