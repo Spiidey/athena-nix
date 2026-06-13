@@ -26,6 +26,52 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace src/functions/users.rs \
       --replace "\"openssl\"" "\"${openssl}/bin/openssl\""
+
+    # LOCAL TESTING ONLY — remove before upstreaming.
+    # aegis-nix normally downloads Athena-OS/athena-nix from codeload.github.com at
+    # install time. On the builder VM the fork lives at /mnt/hgfs/athena-nix via
+    # VMware HGFS, so we patch the download out and copy from there instead.
+    # The unzip step becomes a no-op; the subsequent cp from /tmp/athena-nix-main/
+    # still works because our cp -r produces that exact path.
+    substituteInPlace src/functions/base.rs \
+      --replace \
+      'exec(
+            "curl",
+            vec![
+                String::from("-o"),
+                String::from("/tmp/athena-nix.zip"),
+                String::from("https://codeload.github.com/Athena-OS/athena-nix/zip/refs/heads/main"),
+            ],
+        ),
+        "Getting latest Athena OS configuration.",' \
+      'exec(
+            "cp",
+            vec![
+                String::from("-r"),
+                String::from("/mnt/hgfs/athena-nix"),
+                String::from("/tmp/athena-nix-main"),
+            ],
+        ),
+        "Copy local Athena OS configuration from HGFS share.",'
+
+    substituteInPlace src/functions/base.rs \
+      --replace \
+      'exec(
+            "unzip",
+            vec![
+                String::from("/tmp/athena-nix.zip"),
+                String::from("-d"),
+                String::from("/tmp/"),
+            ],
+        ),
+        "Extract Athena OS configuration archive.",' \
+      'exec(
+            "echo",
+            vec![
+                String::from("Skipped: using local HGFS copy instead of zip."),
+            ],
+        ),
+        "Skip unzip (local copy in use).",'
   '';
 
   meta = with lib; {
