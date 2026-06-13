@@ -8,10 +8,7 @@
   services.xserver = {
     enable = true;
     desktopManager.gnome.enable = true;
-    displayManager.gdm = {
-      enable = true;
-      wayland = true;
-    };
+    displayManager.gdm.enable = true;
   };
 
   # autoLogin moved out of xserver in NixOS 24.05.
