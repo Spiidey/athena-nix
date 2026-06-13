@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }: {
 
   imports = [
-    ./installation-cd-graphical-mate.nix
+    ./installation-cd-graphical-gnome.nix
   ];
 
   boot = {

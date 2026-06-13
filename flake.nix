@@ -54,8 +54,8 @@
             baseHosts = true;
             baseLocale = true;
             homeManagerUser = "athena";
-            desktopManager = "mate";
-            displayManager = null; # ISO uses lightdm directly via installation-cd-graphical-mate.nix
+            desktopManager = "gnome";
+            displayManager = null; # ISO uses GDM directly via installation-cd-graphical-gnome.nix
             terminal = "alacritty";
             theme = "graphite";
           };
