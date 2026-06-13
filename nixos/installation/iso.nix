@@ -84,20 +84,17 @@
 
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
   ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     (callPackage ../pkgs/aegis-nix/package.nix { })
-    (callPackage ../pkgs/aegis-tui/package.nix { })
+    # aegis-tui removed: Athena-OS/aegis-tui repo deleted upstream (replaced by dory)
     (callPackage ../pkgs/athena-config-nix/package.nix { })
+    (callPackage ../pkgs/dory/package.nix { })
+    seclists
   ];
 
-  home-manager.users.${config.athena.homeManagerUser} = { pkgs, ... }: {
-    /* The home.stateVersion option does not have a default and must be set */
-    home.stateVersion = "24.05";
-    nixpkgs.config.allowUnfree = true;
-  };
 }

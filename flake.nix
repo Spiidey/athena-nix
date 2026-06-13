@@ -55,6 +55,7 @@
             baseLocale = true;
             homeManagerUser = "athena";
             desktopManager = "mate";
+            displayManager = null; # ISO uses lightdm directly via installation-cd-graphical-mate.nix
             terminal = "alacritty";
             theme = "graphite";
           };
@@ -92,10 +93,13 @@
         ];
       };
 
-      packages = forAllSystems (system: {
+      packages = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system}; in {
         "live-image" = self.nixosConfigurations.${
           if system == "aarch64-linux" then "live-image-aarch64" else "live-image"
         }.config.system.build.isoImage;
+        "aegis-nix" = pkgs.callPackage ./nixos/pkgs/aegis-nix/package.nix {};
+        "dory" = pkgs.callPackage ./nixos/pkgs/dory/package.nix {};
         default = self.packages.${system}."live-image";
       });
 

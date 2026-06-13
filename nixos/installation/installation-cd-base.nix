@@ -18,9 +18,8 @@ with lib;
   # Adds terminus_font for people with HiDPI displays
   console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];
 
-  # ISO naming.
-  #isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
-  isoImage.isoName = "athenaos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
+  # ISO naming (isoImage.isoName was renamed to image.fileName in NixOS 26.05).
+  image.fileName = "athenaos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
 
   # EFI booting
   isoImage.makeEfiBootable = true;
@@ -47,5 +46,5 @@ with lib;
     done
   '';
 
-  system.stateVersion = "24.05";
+  system.stateVersion = lib.mkDefault "25.11";
 }
