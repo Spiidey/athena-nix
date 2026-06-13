@@ -131,5 +131,15 @@ in {
     ./modules/boot
     ./hosts
   ];
+
+  # GNOME must always run with GDM — it is the only DM it officially supports on NixOS.
+  # Without this, dory's installer creates a broken config: its "Display Manager" step
+  # presents SDDM themes (Astronaut, Cyberpunk, etc.) as the only choices, so any user
+  # who picks GNOME ends up with desktopManager="gnome" + displayManager="sddm", which
+  # produces a system that fails to start a graphical session.
+  # mkForce wins over any value dory (or the user's flake.nix) placed on displayManager.
+  config = lib.mkIf (cfg.desktopManager == "gnome") {
+    athena.displayManager = lib.mkForce "gdm";
+  };
 }
 
