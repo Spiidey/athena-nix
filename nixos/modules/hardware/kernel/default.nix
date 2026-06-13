@@ -4,8 +4,10 @@
     boot = {
       kernelPackages = lib.mkDefault pkgs.linuxPackages; # LTS Kernel
       kernelModules = [ "rtl8821cu" ];
-      loader.grub.useOSProber = lib.mkIf pkgs.hostPlatform.isx86_64 true;
-      extraModulePackages = lib.optionals pkgs.hostPlatform.isx86_64 (with config.boot.kernelPackages; [ vmware ]); /*vmware needed to install VMware Workstation software*/
+      # os-prober works wherever GRUB does; if systemd-boot is used instead this is a no-op.
+      loader.grub.useOSProber = true;
+      # The vmware kernel module is for running VMware Workstation *on* Athena — x86_64 only.
+      extraModulePackages = lib.optionals pkgs.hostPlatform.isx86_64 (with config.boot.kernelPackages; [ vmware ]);
     };
   };
 }
